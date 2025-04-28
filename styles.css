@@ -27,23 +27,28 @@ button:hover {
   background-color: #0056b3;
 }
 
+.llm-response {
+  background-color: #f8f9fa;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+}
+
 .accordion {
-  background-color: white;
-  border-radius: 5px;
-  margin-top: 5px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 .accordion-header {
+  background-color: #eee;
   padding: 10px;
   cursor: pointer;
   font-weight: bold;
-  border-bottom: 1px solid #ddd;
 }
 
 .accordion-body {
-  display: none;
   padding: 10px;
-  font-size: 14px;
-  color: #333;
+  display: none;
 }

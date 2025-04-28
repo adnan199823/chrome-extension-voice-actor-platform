@@ -1,20 +1,27 @@
 {
-    "manifest_version": 3,
-    "name": "Voice Terms Collector",
-    "version": "1.0",
-    "description": "Collects Terms & Conditions, Agreements, and NDA info from platforms",
-    "permissions": ["activeTab", "scripting"],
-    "action": {
-      "default_popup": "popup.html"
-    },
-    "content_scripts": [
-      {
-        "matches": ["<all_urls>"],
-        "js": ["content.js"]
-      }
-    ],
-    "icons": {
-      "48": "icon.png"
+  "manifest_version": 3,
+  "name": "Voice Terms Collector",
+  "version": "1.0",
+  "description": "Collects Terms & Conditions, Agreements, and NDA info from platforms",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage"
+  ],
+  "host_permissions": [
+    "<all_urls>",
+    "https://api.openrouter.ai/*"   
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
     }
+  ],
+  "icons": {
+    "48": "icon.png"
+  }
 }
-  

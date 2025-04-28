@@ -1,3 +1,5 @@
+import { getLLMFeedback } from "./llmHandler.js"; 
+
 console.log("Popup loaded");
 
 document.getElementById("scrapeBtn").addEventListener("click", async () => {
@@ -8,10 +10,14 @@ document.getElementById("scrapeBtn").addEventListener("click", async () => {
   chrome.scripting.executeScript({
     target: { tabId: tab.id },
     function: extractTerms
-  }, (results) => {
+  }, async (results) => { 
     const data = results[0]?.result;
     console.log("Received extracted data:", data);
     displaySummary(data);
+
+    const feedback = await getLLMFeedback(data);
+    console.log("LLM Feedback:", feedback);
+    displayLLMFeedback(feedback);
   });
 });
 
@@ -72,3 +78,16 @@ function displaySummary(results) {
     container.appendChild(accordion);
   }
 }
+
+function displayLLMFeedback(feedback) {
+  const container = document.getElementById("summaryContainer");
+
+  const feedbackDiv = document.createElement("div");
+  feedbackDiv.className = "llm-feedback";
+  feedbackDiv.innerHTML = `<h3>LLM Summary Feedback:</h3><p>${feedback}</p>`;
+
+  container.appendChild(feedbackDiv);
+}
+
+
+//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

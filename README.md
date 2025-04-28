@@ -1,1 +1,1 @@
-# voice-actor-platform-contracts-summarizer
+# chrome-extension-summarizer-voice-actors-privacy-data
