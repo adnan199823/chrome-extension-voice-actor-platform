@@ -2,21 +2,52 @@
   "manifest_version": 3,
   "name": "Voice Terms Collector",
   "version": "1.0",
-  "description": "Collects Terms & Conditions, Agreements, and NDA info from platforms",
+  "description": "Automatically detects and summarizes Terms & Conditions, Agreements, and NDA info from voice actor platforms.",
   "permissions": [
     "activeTab",
     "scripting",
     "storage"
   ],
   "host_permissions": [
-    "<all_urls>",
-    "https://api.openrouter.ai/*"   
+    "*://*.voices.com/*",
+    "*://*.voice123.com/*",
+    "*://*.bodalgo.com/*",
+    "*://*.voplanet.com/*",
+    "*://*.castvoices.com/*",
+    "*://*.upwork.com/*",
+    "*://*.fiverr.com/*",
+    "*://*.castingcall.club/*",
+    "*://*.backstage.com/*",
+    "*://*.freelancer.com/*",
+    "*://*.acx.com/*",
+    "*://*.voquent.com/*",
+    "*://*.bunnystudio.com/*",
+    "https://api.openrouter.ai/*"
   ],
   "action": {
     "default_popup": "popup.html",
     "default_icon": "icon.png"
   },
   "content_scripts": [
+    {
+      "matches": [
+        "*://*.voices.com/*",
+        "*://*.voice123.com/*",
+        "*://*.bodalgo.com/*",
+        "*://*.voplanet.com/*",
+        "*://*.castvoices.com/*",
+        "*://*.upwork.com/*",
+        "*://*.fiverr.com/*",
+        "*://*.castingcall.club/*",
+        "*://*.backstage.com/*",
+        "*://*.freelancer.com/*",
+        "*://*.acx.com/*",
+        "*://*.voquent.com/*",
+        "*://*.bunnystudio.com/*"
+      ],
+      "js": ["detectProject.js"],
+      "run_at": "document_idle"
+    },
     {
       "matches": ["<all_urls>"],
       "js": ["content.js"]

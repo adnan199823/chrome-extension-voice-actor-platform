@@ -1,18 +1,46 @@
-import { getLLMFeedback, getLLMAnswerFromQuestion } from "./llmHandler.js"; 
+import { getLLMFeedback, getLLMAnswerFromQuestion } from "./llmHandler.js";
 
 console.log("Popup loaded");
 
-let extractedContractData = null; 
+let extractedContractData = null;
+
+const supportedDomains = [
+  "voices.com", "voice123.com", "bodalgo.com", "voplanet.com",
+  "castvoices.com", "upwork.com", "fiverr.com", "castingcall.club",
+  "backstage.com", "freelancer.com", "acx.com", "voquent.com", "bunnystudio.com"
+];
+
+chrome.storage.local.get(null, async (items) => {
+  const savedKey = Object.keys(items).find(k => k.startsWith("terms_"));
+  if (savedKey) {
+    extractedContractData = items[savedKey];
+    console.log("Loaded saved terms from auto-detection:", savedKey, extractedContractData);
+
+    displaySummary(extractedContractData);
+    const feedback = await getLLMFeedback(extractedContractData);
+    displayLLMFeedback(feedback);
+  }
+});
 
 document.getElementById("scrapeBtn").addEventListener("click", async () => {
   console.log("Scrape button clicked");
 
   let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
+  let isSupportedSite = supportedDomains.some(domain => tab.url.includes(domain));
+  if (!isSupportedSite) {
+    alert("This site is not supported. Please navigate to a known voice actor platform.");
+    return;
+  }
+
+  chrome.storage.local.clear(() => {
+    console.log("Cleared previous auto-saved contract data.");
+  });
+
   chrome.scripting.executeScript({
     target: { tabId: tab.id },
     function: extractTerms
-  }, async (results) => { 
+  }, async (results) => {
     extractedContractData = results[0]?.result;
     console.log("Received extracted data:", extractedContractData);
 
@@ -33,7 +61,7 @@ document.getElementById("qaSubmit").addEventListener("click", async () => {
 
   responseDiv.innerHTML = "⏳ Thinking...";
   const answer = await getLLMAnswerFromQuestion(extractedContractData, question);
-  input.value = ""; 
+  input.value = "";
   responseDiv.innerHTML = `<p><strong>Answer:</strong> ${answer}</p>`;
 });
 
@@ -84,11 +112,6 @@ function displaySummary(results) {
   const container = document.getElementById("summaryContainer");
   container.innerHTML = "";
 
-  if (!results || Object.keys(results).length === 0) {
-    container.innerHTML = "<p>No relevant information found on this page.</p>";
-    return;
-  }
-
   for (const [category, snippets] of Object.entries(results)) {
     const accordion = document.createElement("div");
     accordion.className = "accordion";
@@ -113,7 +136,6 @@ function displaySummary(results) {
     container.appendChild(accordion);
   }
 }
-
 
 
 //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
