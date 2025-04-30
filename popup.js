@@ -1,4 +1,4 @@
-import { getLLMFeedback, getLLMAnswerFromQuestion } from "./llmHandler.js";
+import { getLLMFeedback, getLLMAnswerFromQuestion } from "./Feature Components/llmHandler.js";
 
 console.log("Popup loaded");
 
