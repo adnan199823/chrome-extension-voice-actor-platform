@@ -1,6 +1,8 @@
-import { getLLMFeedback } from "./llmHandler.js"; 
+import { getLLMFeedback, getLLMAnswerFromQuestion } from "./llmHandler.js"; 
 
 console.log("Popup loaded");
+
+let extractedContractData = null; 
 
 document.getElementById("scrapeBtn").addEventListener("click", async () => {
   console.log("Scrape button clicked");
@@ -11,14 +13,28 @@ document.getElementById("scrapeBtn").addEventListener("click", async () => {
     target: { tabId: tab.id },
     function: extractTerms
   }, async (results) => { 
-    const data = results[0]?.result;
-    console.log("Received extracted data:", data);
-    displaySummary(data);
+    extractedContractData = results[0]?.result;
+    console.log("Received extracted data:", extractedContractData);
 
-    const feedback = await getLLMFeedback(data);
+    displaySummary(extractedContractData);
+
+    const feedback = await getLLMFeedback(extractedContractData);
     console.log("LLM Feedback:", feedback);
     displayLLMFeedback(feedback);
   });
+});
+
+document.getElementById("qaSubmit").addEventListener("click", async () => {
+  const input = document.getElementById("qaInput");
+  const responseDiv = document.getElementById("qaResponse");
+
+  const question = input.value.trim();
+  if (!question || !extractedContractData) return;
+
+  responseDiv.innerHTML = "⏳ Thinking...";
+  const answer = await getLLMAnswerFromQuestion(extractedContractData, question);
+  input.value = ""; 
+  responseDiv.innerHTML = `<p><strong>Answer:</strong> ${answer}</p>`;
 });
 
 function extractTerms() {
@@ -39,13 +55,29 @@ function extractTerms() {
   for (const [category, keywords] of Object.entries(categories)) {
     const found = [];
     keywords.forEach(keyword => {
-      const match = bodyText.match(new RegExp(`.{0,80}${keyword}.{0,80}`, "gi"));
+      const match = bodyText.match(new RegExp(`.{0,250}${keyword}.{0,250}`, "gi"));
       if (match) found.push(...match);
     });
     if (found.length > 0) results[category] = found;
   }
 
   return results;
+}
+
+function displayLLMFeedback(feedback) {
+  const container = document.getElementById("summaryContainer");
+
+  const feedbackDiv = document.createElement("div");
+  feedbackDiv.className = "llm-feedback-enhanced";
+  feedbackDiv.innerHTML = `
+    <div class="llm-header">
+      <img src="icon.png" alt="AI Icon" class="llm-icon" />
+      <h3>AI Summary</h3>
+    </div>
+    <p>${feedback}</p>
+  `;
+
+  container.appendChild(feedbackDiv);
 }
 
 function displaySummary(results) {
@@ -63,15 +95,18 @@ function displaySummary(results) {
 
     const header = document.createElement("div");
     header.className = "accordion-header";
-    header.textContent = category;
+    header.innerHTML = `<span>${category}</span><span class="toggle-icon">+</span>`;
     header.addEventListener("click", () => {
       const body = header.nextElementSibling;
-      body.style.display = body.style.display === "block" ? "none" : "block";
+      const icon = header.querySelector(".toggle-icon");
+      const isVisible = body.style.display === "block";
+      body.style.display = isVisible ? "none" : "block";
+      icon.textContent = isVisible ? "+" : "−";
     });
 
     const body = document.createElement("div");
     body.className = "accordion-body";
-    body.innerHTML = snippets.map(s => `<p>${s}</p>`).join("");
+    body.innerHTML = snippets.map(s => `<div class="snippet-phrase">• ${s}</div>`).join("");
 
     accordion.appendChild(header);
     accordion.appendChild(body);
@@ -79,15 +114,6 @@ function displaySummary(results) {
   }
 }
 
-function displayLLMFeedback(feedback) {
-  const container = document.getElementById("summaryContainer");
-
-  const feedbackDiv = document.createElement("div");
-  feedbackDiv.className = "llm-feedback";
-  feedbackDiv.innerHTML = `<h3>LLM Summary Feedback:</h3><p>${feedback}</p>`;
-
-  container.appendChild(feedbackDiv);
-}
 
 
 //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

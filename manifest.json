@@ -13,7 +13,8 @@
     "https://api.openrouter.ai/*"   
   ],
   "action": {
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_icon": "icon.png"
   },
   "content_scripts": [
     {

@@ -2,13 +2,17 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Voice Terms Summary</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h2>Voice Contract Summary</h2>
+  <h1 id="mainTitle">Voice Terms Summarizer</h1>
   <button id="scrapeBtn">📄 Collect & Summarize</button>
   <div id="summaryContainer"></div>
+  <div id="qaBox">
+    <input type="text" id="qaInput" placeholder="Ask a question..." />
+    <button id="qaSubmit">Ask</button>
+    <div id="qaResponse"></div>
+  </div>
   <script type="module" src="popup.js"></script>
 </body>
 </html>
