@@ -64,13 +64,14 @@ Follow these steps to set up and run the extension locally:
 
 2. **Navigate to the `Backend` folder.**
 
-3. **Start the backend server**
+3. **Start the backend server.**
+
 ```node backendLLM.js```
 
-4. **open chrome extension page in the browser (`chrome://extensions/`)**
+4. **open chrome extension page in the browser (`chrome://extensions/`).**
 
-5. **Enable 'Developer mode' (toggle at top-right)**
+5. **Enable 'Developer mode' (toggle at top-right).**
 
-6. **load the extension by clicking 'Load unpacked' button (load the entire cloned folder)**
+6. **load the extension by clicking 'Load unpacked' button (load the entire cloned folder).**
 
 7. **Test the extension by running it on different voice actor platform websites.**
