@@ -64,7 +64,7 @@ Follow these steps to set up and run the extension locally:
 
 2. **Navigate to the `Backend` folder.**
 
-3. **Start the backend server.**
+3. **Start the backend server. The command:**
 
 ```node backendLLM.js```
 
