@@ -55,3 +55,22 @@ This Chrome extension helps **voice actors** gain a transparent and overall idea
 - The extension uses the LLM backend to **generate a direct answer in 30–40 words** using extracted contract content as context.
 
 ---
+
+## 🛠️ How to Run the Project
+
+Follow these steps to set up and run the extension locally:
+
+1. **Clone the repository**
+
+2. **Navigate to the `Backend` folder.**
+
+3. **Start the backend server**
+```node backendLLM.js```
+
+4. **open chrome extension page in the browser (`chrome://extensions/`)**
+
+5. **Enable 'Developer mode' (toggle at top-right)**
+
+6. **load the extension by clicking 'Load unpacked' button (load the entire cloned folder)**
+
+7. **Test the extension by running it on different voice actor platform websites.**
